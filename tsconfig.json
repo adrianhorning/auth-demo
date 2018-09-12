@@ -1,13 +1,19 @@
 {
     "compilerOptions": {
-        "outDir": "./dist/",
-        "sourceMap": true,
-        "noImplicitAny": true,
+        "target": "es6",
         "module": "commonjs",
-        "target": "es5",
-        "jsx": "react"
-    },
-    "include": [
-        "./src/**/*"
-    ]
+        "moduleResolution": "node",
+        "allowJs": true,
+        "checkJs": false,
+        "jsx": "react",
+        "sourceMap": true,
+        "outDir": "./build",
+        "rootDir": "./",
+        "noEmit": false,
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true
+    }
 }
