@@ -12,6 +12,7 @@ class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
+        <a href="/auth/facebook">Login with Facebook</a>
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>

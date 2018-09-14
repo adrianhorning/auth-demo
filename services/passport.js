@@ -1,9 +1,8 @@
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
 const keys = require('../config/keys');
-const db = require('./db');
+const db = require('../db');
 
-const User = require('../models/User');
 
 // generates our "identifying token" w/ done function;
 passport.serializeUser((user, done) => {

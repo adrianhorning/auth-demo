@@ -6,7 +6,7 @@ const passport = require('passport');
 const keys = require('./config/keys');
 const config = require('./config/db');
 const db = require('./db');
-// require('./services/passport');
+require('./services/passport');
 
 const app = express();
 
