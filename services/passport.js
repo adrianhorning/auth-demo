@@ -6,14 +6,14 @@ const db = require('../db');
 
 // generates our "identifying token" w/ done function;
 passport.serializeUser((user, done) => {
-    console.log(`serialize user: ${user.id}`);
+    console.log('serializing user');
     done(null, user.id);
 });
 
 // takes identifying piece of info from cookie (^user.id), pass in here to turn into a User.
 passport.deserializeUser((id, done) => {
+    console.log('deserializing user');
     db.query(`SELECT * FROM users WHERE id = ${id};`, (err, rows, fields) => {
-        console.log(`deserialize and rows[0] is: ${rows[0]}`);
         done(null, rows[0]);
     })
 });
@@ -27,9 +27,8 @@ passport.use(new FacebookStrategy({
     (accessToken, refreshToken, profile, done) => {
         const query = `SELECT * FROM users WHERE facebookId = '${profile.id}';`;
         db.query(query, (err, rows) => {
-            console.log(rows);
             if (rows.length !== 0) {
-                // already have existing record with this profile                
+                // already have existing record with this profile     
                 done(null, rows[0]);
                 //   ^error ^what we are saving
             } else {
