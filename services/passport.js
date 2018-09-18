@@ -10,8 +10,8 @@ passport.serializeUser((id, done) => {
 });
 
 // takes identifying piece of info from cookie (^user.id), pass in here to turn into a User.
-passport.deserializeUser((id, done) => {
-    db.query(`SELECT * FROM users WHERE id = ${id};`, (err, rows, fields) => {
+passport.deserializeUser((user, done) => {
+    db.query(`SELECT * FROM users WHERE id = ${user.id};`, (err, rows, fields) => {
         done(null, rows[0]);
     })
 });
@@ -31,11 +31,14 @@ passport.use(new FacebookStrategy({
                 //   ^error ^what we are saving
             } else {
                 // we don't have a user record with this ID, make a new record
+                console.log('need to create a user');
                 const name = profile.displayName.split(' ');
                 const firstName = name[0];
                 const lastName = name[1];
-                db.query(`INSERT INTO users (first_name, last_name, facebookId) VALUES ('${firstName}', '${lastName}', '${profile.id}');`, (err, result, fields) => {
+                const insertStatement = `INSERT INTO users (first_name, last_name, facebookId, accessToken) VALUES ('${firstName}', '${lastName}', '${profile.id}', '${accessToken}');`
+                db.query(insertStatement, (err, result, fields) => {
                     if (err) throw err;
+                    console.log(result);
                     done(null, result.insertId)
                 });
             }

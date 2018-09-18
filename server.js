@@ -6,6 +6,8 @@ const passport = require('passport');
 const keys = require('./config/keys');
 const config = require('./config/db');
 const db = require('./db');
+const axios = require('axios');
+
 require('./services/passport');
 
 const app = express();
@@ -25,14 +27,48 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 require('./routes/authRoutes')(app);
 
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static('build'));
+app.get("/", (req, res) => {
+  res.send('hey there')
+})
 
-//   const path = require('path');
-//   app.get('*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, 'scripts', 'build', 'index.html'));
-//   });
-// }
+app.get("/api/getUserAccount/:userFacebookId/:accessToken", async (req, res) => {
+  try {
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.userFacebookId}/accounts?access_token=${req.params.accessToken}`);
+    res.send(response.data);
+  } catch (error) {
+    throw(error);
+  }
+})
+
+app.get("/api/getFBPageAccount/:fbPageId/:accessToken", async (req, res) => {
+  try {
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.fbPageId}?access_token=${req.params.accessToken}`);
+    res.send(response.data);
+  } catch (error) {
+    throw(error);
+  }
+})
+
+app.get("/api/getInstaBizAccountId/:fbPageId/:accessToken", async (req, res) => {
+  try {
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.fbPageId}?fields=instagram_business_account&access_token=${req.params.accessToken}`);
+    res.send(response.data);
+  } catch (error) {
+    throw(error);
+  }
+})
+
+app.get("/api/getInstaMedia/:instaId/:accessToken", async (req, res) => {
+  try {
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.instaId}/media?access_token=${req.params.accessToken}`);
+    res.send(response.data);
+  } catch (error) {
+    throw(error);
+  }
+})
+
+// "https://graph.facebook.com/v3.1/17841402777077586/media?access_token="
+
 
 const port = process.env.PORT || 3001;
 const server = app.listen(port, function () {
