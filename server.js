@@ -10,8 +10,6 @@ require('./services/passport');
 
 const app = express();
 
-const ALL_USERS = 'SELECT * FROM users;';
-
 app.use(
   cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -27,30 +25,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 require('./routes/authRoutes')(app);
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('build'));
+// if (process.env.NODE_ENV === 'production') {
+//   app.use(express.static('build'));
 
-  const path = require('path');
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'scripts', 'build', 'index.html'));
-  });
-}
-
-app.get('/', (req, res) => {
-  res.send('Hey there')
-})
-
-app.get('/users', (req, res) => {
-  db.query(ALL_USERS, (err, results) => {
-    if (err) {
-      return res.send(err);
-    } else {
-      return res.json({
-        data: results
-      })
-    }
-  })
-})
+//   const path = require('path');
+//   app.get('*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'scripts', 'build', 'index.html'));
+//   });
+// }
 
 const port = process.env.PORT || 3001;
 const server = app.listen(port, function () {

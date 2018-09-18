@@ -14,6 +14,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
+        "noImplicitAny": false, // needed to do this for react-router-dom to work, per: https://stackoverflow.com/questions/41462729/typescript-react-could-not-find-a-declaration-file-for-module-react-material
         "noFallthroughCasesInSwitch": true
     }
 }

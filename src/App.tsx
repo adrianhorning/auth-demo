@@ -1,24 +1,19 @@
 import * as React from 'react';
+import { Route, BrowserRouter } from 'react-router-dom';
 import './App.css';
+import Home from './components/Home';
+import Landing from './components/Landing';
 // Also tried this but it didn't render the svg
 // https://webpack.js.org/guides/typescript/#importing-other-assets
-const logo = require("./logo.svg") as string;
+// const logo = require("./logo.svg") as string;
 
-class App extends React.Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <a href="/auth/facebook">Login with Facebook</a>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <BrowserRouter>
+    <div>
+      <Route exact path="/" component={Landing} />
+      <Route exact path="/home" component={Home} />
+    </div>
+  </BrowserRouter>
+)
 
 export default App;
