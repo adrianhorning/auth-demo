@@ -32,8 +32,9 @@ app.get("/", (req, res) => {
 })
 
 app.get("/api/getUserAccount/:userFacebookId/:accessToken", async (req, res) => {
+  const { userFacebookId, accessToken } = req.params;
   try {
-    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.userFacebookId}/accounts?access_token=${req.params.accessToken}`);
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${userFacebookId}/accounts?access_token=${accessToken}`);
     res.send(response.data);
   } catch (error) {
     throw(error);
@@ -41,8 +42,9 @@ app.get("/api/getUserAccount/:userFacebookId/:accessToken", async (req, res) => 
 })
 
 app.get("/api/getFBPageAccount/:fbPageId/:accessToken", async (req, res) => {
+  const { fbPageId, accessToken } = req.params;
   try {
-    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.fbPageId}?access_token=${req.params.accessToken}`);
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${fbPageId}?access_token=${accessToken}`);
     res.send(response.data);
   } catch (error) {
     throw(error);
@@ -50,18 +52,39 @@ app.get("/api/getFBPageAccount/:fbPageId/:accessToken", async (req, res) => {
 })
 
 app.get("/api/getInstaBizAccountId/:fbPageId/:accessToken", async (req, res) => {
+  const { fbPageId, accessToken } = req.params;
   try {
-    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.fbPageId}?fields=instagram_business_account&access_token=${req.params.accessToken}`);
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${fbPageId}?fields=instagram_business_account&access_token=${accessToken}`);
     res.send(response.data);
   } catch (error) {
     throw(error);
   }
 })
 
-app.get("/api/getInstaMediaStats/:instaId/:accessToken", async (req, res) => {
-  // how do I get the insta username?
+app.get("/api/getInstaUserName/:instaId/:accessToken", async (req, res) => {
+  const { instaId, accessToken } = req.params;
   try {
-    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.instaId}?fields=business_discovery.username(adrianhorning)%7Bfollowers_count%2Cmedia_count%2Cmedia%7Bcomments_count%2Clike_count%7D%7D&access_token=${req.params.accessToken}`);
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${instaId}?fields=id%2Cusername&access_token=${accessToken}`);
+    res.send(response.data);
+  } catch (error) {
+    throw(error);
+  }
+})
+
+app.get("/api/getInstaMediaStats/:instaId/:instaUserName/:accessToken", async (req, res) => {
+  const { instaId, instaUserName, accessToken } = req.params;
+  try {
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${instaId}?fields=business_discovery.username(${instaUserName})%7Bfollowers_count%2Cmedia_count%2Cmedia%7Bcomments_count%2Clike_count%7D%7D&access_token=${accessToken}`);
+    res.send(response.data);
+  } catch (error) {
+    throw(error);
+  }
+})
+
+app.get("/api/getInstaMediaItemDetail/:instaMediaItemId/:accessToken", async (req, res) => {
+  const { instaMediaItemId, accessToken } = req.params;
+  try {
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${instaMediaItemId}?fields=id%2Cmedia_type%2Cmedia_url&access_token=${accessToken}`);
     res.send(response.data);
   } catch (error) {
     throw(error);

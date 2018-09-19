@@ -6,22 +6,30 @@ class Home extends Component {
         super(props);
         this.state = {
             user: null,
-            instaMedia: null
+            instaMedia: null,
+            accessToken: null
         }
     }
     async componentDidMount() {
         const res = await fetch('/api/current_user');
         const data = await res.json();
-        const userAccount = await fetch(`/api/getUserAccount/${data.facebookId}/${data.accessToken}`);
-        const userAccountData = await userAccount.json();
+        const accessToken = data.accessToken;
+        const userAccountReq = await fetch(`/api/getUserAccount/${data.facebookId}/${accessToken}`);
+        const userAccountData = await userAccountReq.json();
         const fbPageId = userAccountData.data[0].id;
-        const instaBiz = await fetch(`/api/getInstaBizAccountId/${fbPageId}/${data.accessToken}`);
-        const instaBizData = await instaBiz.json();
+        const instaBizReq = await fetch(`/api/getInstaBizAccountId/${fbPageId}/${accessToken}`);
+        const instaBizData = await instaBizReq.json();
         const instaBizId = instaBizData.instagram_business_account.id;
-        const instaMediaReq = await fetch(`/api/getInstaMediaStats/${instaBizId}/${data.accessToken}`);
+        const instaUserNameReq = await fetch(`/api/getInstaUserName/${instaBizId}/${accessToken}`);
+        const instaUserNameData = await instaUserNameReq.json();
+        const instaUserName = instaUserNameData.username;
+        const instaMediaReq = await fetch(`/api/getInstaMediaStats/${instaBizId}/${instaUserName}/${accessToken}`);
         const instaMedia = await instaMediaReq.json();
-        console.log(instaMedia);
-        this.setState({user: data, instaMedia: instaMedia.business_discovery.media.data}, () => console.log(this.state));
+        this.setState({
+            user: data, 
+            instaMedia: instaMedia.business_discovery.media.data,
+            accessToken
+        });
     }
     render() {
         if (this.state.user) {
@@ -36,7 +44,7 @@ class Home extends Component {
                         Here's your insta stuff!!!
                     </h3>
                     {this.state.instaMedia.map(media => {
-                        return <MediaItem key={media.id} mediaId={media.id}/>
+                        return <MediaItem key={media.id} media={media} accessToken={this.state.accessToken}/>
                     })}
                 </div>
             )
