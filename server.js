@@ -58,17 +58,15 @@ app.get("/api/getInstaBizAccountId/:fbPageId/:accessToken", async (req, res) => 
   }
 })
 
-app.get("/api/getInstaMedia/:instaId/:accessToken", async (req, res) => {
+app.get("/api/getInstaMediaStats/:instaId/:accessToken", async (req, res) => {
+  // how do I get the insta username?
   try {
-    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.instaId}/media?access_token=${req.params.accessToken}`);
+    const response = await axios.get(`https://graph.facebook.com/v3.1/${req.params.instaId}?fields=business_discovery.username(adrianhorning)%7Bfollowers_count%2Cmedia_count%2Cmedia%7Bcomments_count%2Clike_count%7D%7D&access_token=${req.params.accessToken}`);
     res.send(response.data);
   } catch (error) {
     throw(error);
   }
 })
-
-// "https://graph.facebook.com/v3.1/17841402777077586/media?access_token="
-
 
 const port = process.env.PORT || 3001;
 const server = app.listen(port, function () {
